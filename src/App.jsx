@@ -3,26 +3,35 @@ import React, { useState } from "react";
 const TodoApp = () => {
   const [inputValue, setInputValue] = useState("");
   const [todo, addTodo] = useState([]);
+  const [editIndex,setEditIndex]=useState(null)
+  const [filter,setFilter]=useState('All')  
   const handleTodoValue = () => {
     if (inputValue.trim() == "") {
       alert("Please Enter Your Input Value 🙄");
-    } else {
-      console.log(todo);
-      addTodo([...todo, inputValue]);
-      setInputValue("");
+      return;
+    } 
+    if(editIndex!==null){
+      const ubdatedTodo=[...todo]      
+      ubdatedTodo[editIndex]=inputValue
+      addTodo(ubdatedTodo)
+      setEditIndex(null)
     }
+    else {
+      addTodo([...todo, inputValue]);
+    }
+    setInputValue("");
   };
   const handleDeleteFunctionality = (userId) => {
-    const removeTodoFromTodoList = todo.filter(
-      (text, index) => index !== userId
+    const removeTodoFromTodoList = todo.filter((text, index) => index !== userId
     );
     addTodo(removeTodoFromTodoList);
     console.log(removeTodoFromTodoList);
   };
-  const handleTodoEdit = (userId) => {
-    const editTodo=
-    console.log("editTodo=>", editTodo);
+  const handleTodoEdit = (index) => {
+    setInputValue(todo[index])
+    setEditIndex(index)
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
@@ -41,17 +50,24 @@ const TodoApp = () => {
           <button
             className="w-full mt-4 bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition duration-200"
             onClick={handleTodoValue}
+            
           >
             Add
           </button>
           <div className="flex justify-evenly text-white ">
-            <button className="rounded-md p-2 m-4 bg-slate-400 w-[6rem] hover:bg-slate-500">
+            <button className="rounded-md p-2 m-4 bg-slate-400 w-[6rem] hover:bg-slate-500"
+             onClick={()=>setFilter('All')}
+            >
               All
             </button>
-            <button className="rounded-md p-2 m-4 bg-green-400 hover:bg-green-500">
+            <button className="rounded-md p-2 m-4 bg-green-400 hover:bg-green-500"
+             onClick={()=>setFilter('Completed')}
+            >
               Completed
             </button>
-            <button className="rounded-md p-2 m-4 bg-red-400 hover:bg-red-500">
+            <button className="rounded-md p-2 m-4 bg-red-400 hover:bg-red-500"
+             onClick={()=>setFilter('InCompleted')}
+            >
               InCompleted
             </button>
           </div>
@@ -60,7 +76,7 @@ const TodoApp = () => {
           return (
             <ul className="mt-4 space-y-3" key={userId}>
               <li className="flex justify-between items-center bg-gray-50 p-3 rounded-md shadow">
-                <span className="text-gray-700">{userText}</span>
+                <span className="text-gray-700 ">{userText}</span>
                 <button
                   className="text-blue-500 hover:text-blue-700 text-[1.10rem] "
                   onClick={() => handleTodoEdit(userId)}
