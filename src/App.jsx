@@ -76,7 +76,7 @@ const TodoApp = () => {
           return (
             <ul className="mt-4 space-y-3" key={userId}>
               <li className="flex justify-between items-center bg-gray-50 p-3 rounded-md shadow">
-                <span className="text-gray-700 ">{userText}</span>
+                <span className="text-gray-700 " >{userText}</span>
                 <button
                   className="text-blue-500 hover:text-blue-700 text-[1.10rem] "
                   onClick={() => handleTodoEdit(userId)}
